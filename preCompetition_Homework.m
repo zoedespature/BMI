@@ -5,33 +5,33 @@ load('monkeydata_training.mat');
 %% Raster plot
 
 figure;
-hold on
-y = 0;
-for iTrial = 1:98
+hold on     % retains plots so that new plots added to the axes do not delete existing plots
+
+
+for iTrial = 1:length(trial)    % For loop which goes from the first trial of a movement til the last one (1 to 100)
     
-    spks = [];
-    for i = 1:672
-        if trial(1,1).spikes(iTrial,i) == 1
-            spks = [spks i];
+    spks = [];                  % Creating an empty array which will contain the time stamp of each spike
+    for i = 1:length(trial(iTrial,1).spikes)        % For loop to go through the array of the first neural unit of each trial
+        if trial(iTrial,1).spikes(1,i) == 1         % If loop which detects when the unit fired (when its =1)
+            spks = [spks i];                        % Add the time stamp at which the unit fired to the spks array
         end
     end
     
-%     spks         = trial(1,1).spikes(iTrial,:);         % Replicate array
-    xspikes = repmat(spks,3,1);
-    yspikes      	= nan(size(xspikes));       % NaN array
+    xspikes = repmat(spks,2,1);         % Make an array with two rows of the timestamps
+    yspikes = zeros(size(xspikes));     % Create an array with same dimensions as xspikes filled with zeroes
+                                        % Will be the indexes where plot has to draw a vertical line
     
-    if ~isempty(yspikes)
-        yspikes(1,:) = iTrial-1;                % Y-offset for raster plot
-        yspikes(2,:) = iTrial;
-    end
-%     
-%     plot(trial(1,1).spikes(iTrial,:)+y);
-    plot(yspikes, xspikes, 'Color', 'k');
-%     y=y+1;
+    yspikes(1,:) = iTrial-1;            % Index of lower bound
+    yspikes(2,:) = iTrial;              % Index of higher bound
+                                        
+
+    plot(xspikes, yspikes, 'Color', 'k');   % Will plot a straight line between lower and higher bound of yspikes, at times indicated by xspikes
 
 end
 
 title('Raster plot for one neural unit over many trials');
+xlabel('Time (ms)');
+ylabel('Trial number');
 
 
 %% Peristimulus time histogram (PSTH)
@@ -77,7 +77,7 @@ plot(xi,f)
 %% Tuning curve
 
 figure;
-fire_rates = zeros(8,100)
+fire_rates = zeros(8,100);
 
 % plot(trial(1,1).spikes(4,:))
 
@@ -105,10 +105,50 @@ end
 
 fire_rates = transpose(fire_rates);
 
-avg_fire_rate = mean(fire_rates)
+avg_fire_rate = mean(fire_rates);
 
 figure;
 
 plot(avg_fire_rate);
 
+
+%% Population vector algorithm
+
+fire_rates = zeros(100,8);
+
+avg_fire_rates = zeros(98, 8);
+
+% plot(trial(2,3).spikes(1,:))
+
+for neuron = 1:98
+
+    for movement = 1:8
+
+        for trial_num = 1:100
+
+        count = 0;
+
+            for i = 1:length(trial(trial_num,movement).spikes)
+
+                if trial(trial_num,movement).spikes(neuron,i) == 1
+
+                    count = count + 1;
+
+                end
+
+            end
+
+        fire_rates(trial_num, movement) = count;
+
+        end
+
+    end
+
+    avg_fire_rate = mean(fire_rates);
+
+    avg_fire_rates(neuron, :) = avg_fire_rate;
+
+ 
+
+end
 
