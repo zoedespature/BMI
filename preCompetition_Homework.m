@@ -35,44 +35,27 @@ ylabel('Trial number');
 
 
 %% Peristimulus time histogram (PSTH)
-spks = [];
 
-for iTrial = 1:98
+spks = [];      % Spks array is created outside of for loop to gather all the time stamps at which neural unit 1 fired through every trial
+
+for iTrial = 1:length(trial)    % For loop which goes from the first trial of a movement til the last one (1 to 100)
     
-    for i = 1:672
-        
-        if trial(1,1).spikes(iTrial,i) == 1
-            spks = [spks i];
+    for i = 1:length(trial(iTrial,1).spikes)        % For loop to go through the array of the first neural unit of each trial
+        if trial(iTrial,1).spikes(1,i) == 1         % If loop which detects when the unit fired (when its =1)
+            spks = [spks i];                        % Add the time stamp at which the unit fired to the spks array
         end
-        
     end
     
 end
 
 figure;
-nbins               = 20;
-h                   = histogram(spks,nbins);
-h.FaceColor         = 'k';
+nbins               = 20;       % divide range of values into nbins intervals, count how many values fall into each interval
+h                   = histogram(spks,nbins);    % create histogram
+h.FaceColor         = 'k';                      % change color of histogram to black
 
-mVal                = max(h.Values)+round(max(h.Values)*.1);
-
-XLabel.String  	= 'Time [s]';
-YLabel.String  	= 'Spikes/Bin';
-
-slength             = 500;                                  % Length of signal trace [ms]
-bdur                = slength/nbins;                        % Bin duration in [ms]
-nobins              = 1000/bdur;                            % No of bins/sec
-for iLab = 1:length(YTickLabel)
-    lab             = str2num(ax.YTickLabel{iLab});
-    conv            = (lab / length(sptimes)) * nobins; 	% Convert to [Hz]: avg spike count * bins/sec
-    newlabel{iLab}  = num2str(round(conv));                 % Change YLabel
-end
-YTickLabel       = newlabel;
-YLabel.String  	= 'Firing Rate [Hz]';
-
-[f,xi] = ksdensity(spks);
-hold on
-plot(xi,f)
+title('Post Stimulus Time Histogram (PTSH)');
+xlabel('Time (ms)');
+ylabel('spike count');
 
 %% Tuning curve
 
@@ -150,5 +133,11 @@ for neuron = 1:98
 
  
 
+end
+
+figure;
+hold on
+for i = 1:98
+    plot(avg_fire_rates(i, :));
 end
 
