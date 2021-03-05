@@ -47,3 +47,16 @@ for i = 1:100
     end
 end
 accuracy = true/100
+
+%%
+tree = fitctree(train_X,train_Y)
+
+%%
+true = 0
+for i = 1:100
+    label = predict(tree, test_X(i, :))
+    if label == test_Y(i)
+        true = true + 1
+    end
+end
+accuracy = true/100
