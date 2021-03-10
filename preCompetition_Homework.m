@@ -185,3 +185,13 @@ end
 % title('Post Stimulus Time Histogram (PTSH)');
 % xlabel('Time (ms)');
 % ylabel('spike count');
+
+%% Resize  Dataset
+for trial_num = 1:100 
+    for movement = 1:8
+        if length(trial(trial_num,movement).spikes(1,:)) > 800
+            trial(trial_num,movement).spikes(1,1:800)
+        end
+        trial(trial_num, movement).spikes(1, length(trial(trial_num,movement).spikes(1,:))+1:800) = 0
+    end
+end
