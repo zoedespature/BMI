@@ -1,11 +1,11 @@
 function model = positionEstimatorTraining(trial)
 
-X = zeros(720, 98)
-Y = zeros(720, 1)
+X = zeros(720, 98);
+Y = zeros(720, 1);
 
-trial_id = 0
-Y = zeros(720, 1)
-X = zeros(720, 98)
+trial_id = 0;
+Y = zeros(720, 1);
+X = zeros(720, 98);
 for trial_num = 1:100    
     for movement = 1:8
         trial_id = trial_id + 1;
@@ -22,6 +22,6 @@ for trial_num = 1:100
     end
 end
 
-model = fitcknn(train_X,train_Y)
+model = fitcknn(train_X,train_Y);
 
 end
