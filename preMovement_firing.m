@@ -48,3 +48,11 @@ plot(avg_fire_rates_pre_movement(91, :));
 legend('Neuron 7', 'Neuron 33', 'Neuron 41', 'Neuron 91')
 xticklabels({'movement 1', 'Movement 2', 'Movement 3', 'Movement 4', 'Movement 5', 'Movement 6', 'Movement 7', 'Movement 8'})
 
+%%
+figure; 
+hold on 
+title ('Population decoding vector for directions 1 and 8');
+xlabel ('Neuronal unit');
+ylabel ('spike count'); 
+plot (avg_fire_rates_pre_movement(:,1));
+plot(avg_fire_rates_pre_movement(:, 8));
