@@ -1,11 +1,10 @@
 clear all
 clc
-
 load('monkeydata_training.mat')
 
 %%
 [coeff, score] = pca(trial(1,1).spikes(:,:))
-red = score(:, 1)
+red = score(:, 3)
 
 X = []
 X_1 = []
@@ -30,9 +29,9 @@ end
 % X_2 = X(:, 2:end);
 % Y = trial(1,1).spikes(:,:);
 
-A = X_2 * X_1' * inv(X_1 * X_1');
+A = X_2 * X_1' * inv(X_1 * X_1')
 
-H = Y * X' * inv( X * X');
+H = Y * X' * inv(X * X')
 
 Q = (X_2 - A*X_1) * transpose(X_2 - A*X_1)./(length(X) -1) 
 
@@ -81,9 +80,3 @@ plot(trial(3,1).handPos(1,:),trial(3,1).handPos(2,:))
 plot(xhat(1,:), xhat(2,:))
 
 
-%%
-[coeff, score] = pca(trial(1,1).spikes(:,:))
-red = score(:, 1)
-
-yy= trial(1,1).spikes(:,:)
-x_train = red'*trial(1,1).spikes(:,:)
