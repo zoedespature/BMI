@@ -15,8 +15,8 @@ ix = randperm(length(trial));
 %addpath(teamName);
 
 % Select training and testing data (you can choose to split your data in a different way if you wish)
-trainingData = trial(ix(1:50),:);
-testData = trial(ix(51:end),:);
+trainingData = trial(ix(1:80),:);
+testData = trial(ix(81:end),:);
 
 fprintf('Testing the continuous position estimator...')
 
@@ -29,7 +29,7 @@ axis square
 grid
 
 % Train Model
-modelParameters = positionEstimatorTraining(trainingData);
+modelParameters = positionEstimatorTraining_Kalman(trainingData);
 
 for tr=1:size(testData,1)
     display(['Decoding block ',num2str(tr),' out of ',num2str(size(testData,1))]);
@@ -47,10 +47,10 @@ for tr=1:size(testData,1)
             past_current_trial.startHandPos = testData(tr,direc).handPos(1:2,1); 
             
             if nargout('positionEstimator') == 3
-                [decodedPosX, decodedPosY, newParameters] = positionEstimator(past_current_trial, modelParameters);
+                [decodedPosX, decodedPosY, newParameters] = positionEstimator_Kalman(past_current_trial, modelParameters);
                 modelParameters = newParameters;
             elseif nargout('positionEstimator') == 2
-                [decodedPosX, decodedPosY] = positionEstimator(past_current_trial, modelParameters);
+                [decodedPosX, decodedPosY] = positionEstimator_Kalman(past_current_trial, modelParameters);
             end
             
             decodedPos = [decodedPosX; decodedPosY];

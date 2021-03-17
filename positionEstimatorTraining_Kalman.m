@@ -39,7 +39,7 @@ function [modelParameters] = positionEstimatorTraining(trainingData)
     for movement = 1:size(trainingData,2)
     
     [coeff, score] = pca(trainingData(1,movement).spikes(:,:));
-    red = score(:, 3);
+    red = score(:, 1:4);
     modelParameters{movement}.red = red;
     
     X = [];
